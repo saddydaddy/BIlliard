@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pool Tournament Summary</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+
+    h1, h2 {
+      margin-bottom: 0.5em;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin-bottom: 2em;
+      width: 100%;
+      max-width: 600px;
+      background-color: #fff;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    /* Highlight style for selected rows */
+    .highlight {
+      background-color: #ffe593 !important;
+    }
+
+    /* A subtle pointer effect for rows */
+    tr.player-row:hover {
+      cursor: pointer;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>BRONX Cue Club - RATING #01 (2025‑02‑06)</h1>
+
+  <h2>Players (Global Points & Local Rating)</h2>
+  <table id="playersTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Player</th>
+        <th>Global Points</th>
+        <th>Local Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- The rows here are populated by the script below -->
+    </tbody>
+  </table>
+
+  <h2>All Matches</h2>
+  <table id="matchesTable">
+    <thead>
+      <tr>
+        <th>Match #</th>
+        <th>Player A</th>
+        <th>Score</th>
+        <th>Player B</th>
+        <th>Winner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- The rows here are populated by the script below -->
+    </tbody>
+  </table>
+
+  <script>
+    // 1) Define the players and their stats from the final table you constructed:
+    const players = [
+      { number: 1, name: "ANDREJ",   globalPoints: 1, localRating: 30 },
+      { number: 2, name: "ANDRIUS",  globalPoints: 0, localRating: 29 },
+      { number: 3, name: "ARTUR",    globalPoints: 6, localRating: 107 },
+      { number: 4, name: "DOLIK",    globalPoints: 3, localRating: 97 },
+      { number: 5, name: "IGOR SH.", globalPoints: 2, localRating: 60 },
+      { number: 6, name: "PETER",    globalPoints: 1, localRating: 52 },
+      { number: 7, name: "RADEK",    globalPoints: 2, localRating: 76 },
+      { number: 8, name: "RAIMIS",   globalPoints: 0, localRating: 27 },
+    ];
+
+    // 2) Define the matches (match number is arbitrary for reference):
+    const matches = [
+      { matchNo: 1,  playerA: "ARTUR",    score: "21 – 18",  playerB: "DOLIK",    winner: "ARTUR"    },
+      { matchNo: 2,  playerA: "IGOR SH.", score: "21 – 20",  playerB: "ARTUR",    winner: "IGOR SH." },
+      { matchNo: 3,  playerA: "DOLIK",    score: "23 – 16",  playerB: "PETER",    winner: "DOLIK"    },
+      { matchNo: 4,  playerA: "RAIMIS",   score: "14 – 20",  playerB: "ANDREJ",   winner: "ANDREJ"   },
+      { matchNo: 5,  playerA: "ANDRIUS",  score: "12 – 20",  playerB: "DOLIK",    winner: "DOLIK"    },
+      { matchNo: 6,  playerA: "ANDRIUS",  score: "17 – 24",  playerB: "IGOR SH.", winner: "IGOR SH." },
+      { matchNo: 7,  playerA: "RAIMIS",   score: "13 – 18",  playerB: "PETER",    winner: "PETER"    },
+      { matchNo: 8,  playerA: "DOLIK",    score: "13 – 18",  playerB: "RADEK",    winner: "RADEK"    },
+      { matchNo: 9,  playerA: "IGOR SH.", score: "15 – 25",  playerB: "RADEK",    winner: "RADEK"    },
+      { matchNo: 10, playerA: "RADEK",    score: "22 – 25",  playerB: "ARTUR",    winner: "ARTUR"    },
+      { matchNo: 11, playerA: "ARTUR",    score: "24 – 10",  playerB: "ANDREJ",   winner: "ARTUR"    },
+      { matchNo: 12, playerA: "PETER",    score: "18 – 23",  playerB: "DOLIK",    winner: "DOLIK"    },
+      { matchNo: 13, playerA: "ARTUR",    score: "17 – 11",  playerB: "RADEK",    winner: "ARTUR"    },
+    ];
+
+    // Get references to table bodies:
+    const playersTableBody = document.querySelector("#playersTable tbody");
+    const matchesTableBody = document.querySelector("#matchesTable tbody");
+
+    // Populate the players table:
+    players.forEach(player => {
+      const row = document.createElement("tr");
+      row.classList.add("player-row"); // helps us with the hover and click
+      row.setAttribute("data-player-name", player.name); // for lookup on click
+
+      row.innerHTML = `
+        <td>${player.number}</td>
+        <td>${player.name}</td>
+        <td>${player.globalPoints}</td>
+        <td>${player.localRating}</td>
+      `;
+      playersTableBody.appendChild(row);
+
+      // Attach click event to highlight:
+      row.addEventListener("click", () => {
+        highlightPlayer(player.name);
+      });
+    });
+
+    // Populate the matches table:
+    matches.forEach(m => {
+      const row = document.createElement("tr");
+      row.classList.add("match-row");
+      row.setAttribute("data-player-a", m.playerA);
+      row.setAttribute("data-player-b", m.playerB);
+
+      row.innerHTML = `
+        <td>${m.matchNo}</td>
+        <td>${m.playerA}</td>
+        <td>${m.score}</td>
+        <td>${m.playerB}</td>
+        <td>${m.winner}</td>
+      `;
+      matchesTableBody.appendChild(row);
+    });
+
+    function highlightPlayer(playerName) {
+      // 1) Clear existing highlights on the players table:
+      document.querySelectorAll("#playersTable tr").forEach(tr => {
+        tr.classList.remove("highlight");
+      });
+
+      // 2) Clear existing highlights on the matches table:
+      document.querySelectorAll("#matchesTable tr").forEach(tr => {
+        tr.classList.remove("highlight");
+      });
+
+      // 3) Highlight the selected player's row in playersTable:
+      //    (look for the <tr> whose "data-player-name" matches 'playerName')
+      const selectedPlayerRow = document.querySelector(
+        `#playersTable tr[data-player-name="${playerName}"]`
+      );
+      if (selectedPlayerRow) {
+        selectedPlayerRow.classList.add("highlight");
+      }
+
+      // 4) Highlight any matches in matchesTable that involve the selected player:
+      const matchRows = document.querySelectorAll("#matchesTable tr.match-row");
+      matchRows.forEach(row => {
+        const pA = row.getAttribute("data-player-a");
+        const pB = row.getAttribute("data-player-b");
+        if (pA === playerName || pB === playerName) {
+          row.classList.add("highlight");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
