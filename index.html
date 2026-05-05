@@ -2,184 +2,154 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pool Tournament Summary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PitchAI - Dropdown Interface</title>
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-      background-color: #f5f5f5;
-    }
-
-    h1, h2 {
-      margin-bottom: 0.5em;
-    }
-
-    table {
-      border-collapse: collapse;
-      margin-bottom: 2em;
-      width: 100%;
-      max-width: 600px;
-      background-color: #fff;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px 12px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #eee;
-    }
-
-    /* Highlight style for selected rows */
-    .highlight {
-      background-color: #ffe593 !important;
-    }
-
-    /* A subtle pointer effect for rows */
-    tr.player-row:hover {
-      cursor: pointer;
-      background-color: #f9f9f9;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .layout { display: grid; grid-template-columns: 320px 1fr 320px; gap: 20px; }
+    fieldset { margin-bottom: 14px; }
+    label { display: block; margin: 8px 0 4px; }
+    select, textarea, button { width: 100%; padding: 8px; box-sizing: border-box; }
+    textarea { min-height: 90px; resize: vertical; }
+    .preview { border: 1px solid #999; min-height: 420px; padding: 12px; }
+    ul { margin: 0; padding-left: 18px; }
   </style>
 </head>
 <body>
+  <h1>PitchAI (No Graphics UI)</h1>
 
-  <h1>BRONX Cue Club - RATING #01 (2025‑02‑06)</h1>
+  <div class="layout">
+    <section>
+      <fieldset>
+        <legend>Mode</legend>
+        <label for="mode">Select mode</label>
+        <select id="mode">
+          <option>Text To Image</option>
+          <option>Context To Image</option>
+          <option>Neurophotosession</option>
+          <option>Face To Image</option>
+          <option>Sketch To Image</option>
+          <option>Inpaint</option>
+          <option>Retouch</option>
+          <option>Background Changer</option>
+          <option>Face Comparison</option>
+          <option>Image To Video</option>
+          <option>Image To 3D</option>
+          <option>Chat</option>
+        </select>
+      </fieldset>
 
-  <h2>Players (Global Points & Local Rating)</h2>
-  <table id="playersTable">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Player</th>
-        <th>Global Points</th>
-        <th>Local Rating</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- The rows here are populated by the script below -->
-    </tbody>
-  </table>
+      <fieldset>
+        <legend>Prompt</legend>
+        <label for="prompt">Describe what you want</label>
+        <textarea id="prompt" placeholder="Write what you want to see"></textarea>
+      </fieldset>
 
-  <h2>All Matches</h2>
-  <table id="matchesTable">
-    <thead>
-      <tr>
-        <th>Match #</th>
-        <th>Player A</th>
-        <th>Score</th>
-        <th>Player B</th>
-        <th>Winner</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- The rows here are populated by the script below -->
-    </tbody>
-  </table>
+      <fieldset>
+        <legend>Generation Options</legend>
+        <label for="turbo">Turbo</label>
+        <select id="turbo"><option>Off</option><option>On</option></select>
+
+        <label for="tiling">Tiling</label>
+        <select id="tiling"><option>Off</option><option>On</option></select>
+
+        <label for="width">Width</label>
+        <select id="width"><option>512</option><option>768</option><option selected>1024</option><option>1536</option></select>
+
+        <label for="height">Height</label>
+        <select id="height"><option>512</option><option>768</option><option selected>1024</option><option>1536</option></select>
+
+        <label for="ratio">Aspect Ratio</label>
+        <select id="ratio">
+          <option>1:1</option><option>16:9</option><option>9:16</option><option>3:4</option><option>21:9</option>
+        </select>
+
+        <label for="style">Style</label>
+        <select id="style">
+          <option>No style</option><option>Cinematic</option><option>Realistic</option><option>Anime</option><option>Sketch</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Control Inputs (Dropdown-only replacement)</legend>
+        <label for="canny">Canny</label>
+        <select id="canny"><option>None</option><option>Upload Source A</option><option>Use Last Image</option></select>
+
+        <label for="scribble">Scribble</label>
+        <select id="scribble"><option>None</option><option>Upload Source B</option><option>Use Last Image</option></select>
+
+        <label for="depth">Depth</label>
+        <select id="depth"><option>None</option><option>Upload Source C</option><option>Use Last Image</option></select>
+
+        <label for="pose">Pose</label>
+        <select id="pose"><option>None</option><option>Upload Source D</option><option>Use Last Image</option></select>
+
+        <label for="lineart">Lineart</label>
+        <select id="lineart"><option>None</option><option>Upload Source E</option><option>Use Last Image</option></select>
+      </fieldset>
+
+      <button id="generateBtn" type="button">Generate</button>
+    </section>
+
+    <section>
+      <h2>Output Area</h2>
+      <div class="preview" id="preview">
+        <p>No graphics mode enabled.</p>
+        <p>Use dropdowns and prompt, then click <strong>Generate</strong>.</p>
+      </div>
+    </section>
+
+    <aside>
+      <fieldset>
+        <legend>History</legend>
+        <label for="historyFilter">History Filter</label>
+        <select id="historyFilter">
+          <option>All</option><option>Text To Image</option><option>Image To Video</option><option>Chat</option>
+        </select>
+        <label for="historyAction">History Action</label>
+        <select id="historyAction">
+          <option>View Latest</option><option>View All</option><option>Clear History</option>
+        </select>
+      </fieldset>
+
+      <h3>Recent Runs</h3>
+      <ul id="historyList">
+        <li>03:05 PM - Text To Image - 4 outputs</li>
+        <li>06:34 PM - Text To Image - 4 outputs</li>
+        <li>01:53 PM - Text To Image - 4 outputs</li>
+      </ul>
+    </aside>
+  </div>
 
   <script>
-    // 1) Define the players and their stats from the final table you constructed:
-    const players = [
-      { number: 1, name: "ANDREJ",   globalPoints: 1, localRating: 30 },
-      { number: 2, name: "ANDRIUS",  globalPoints: 0, localRating: 29 },
-      { number: 3, name: "ARTUR",    globalPoints: 6, localRating: 107 },
-      { number: 4, name: "DOLIK",    globalPoints: 3, localRating: 97 },
-      { number: 5, name: "IGOR SH.", globalPoints: 2, localRating: 60 },
-      { number: 6, name: "PETER",    globalPoints: 1, localRating: 52 },
-      { number: 7, name: "RADEK",    globalPoints: 2, localRating: 76 },
-      { number: 8, name: "RAIMIS",   globalPoints: 0, localRating: 27 },
-    ];
+    document.getElementById("generateBtn").addEventListener("click", () => {
+      const read = (id) => document.getElementById(id).value;
+      const summary = {
+        mode: read("mode"),
+        prompt: read("prompt") || "(empty prompt)",
+        turbo: read("turbo"),
+        tiling: read("tiling"),
+        width: read("width"),
+        height: read("height"),
+        ratio: read("ratio"),
+        style: read("style"),
+        canny: read("canny"),
+        scribble: read("scribble"),
+        depth: read("depth"),
+        pose: read("pose"),
+        lineart: read("lineart")
+      };
 
-    // 2) Define the matches (match number is arbitrary for reference):
-    const matches = [
-      { matchNo: 1,  playerA: "ARTUR",    score: "21 – 18",  playerB: "DOLIK",    winner: "ARTUR"    },
-      { matchNo: 2,  playerA: "IGOR SH.", score: "21 – 20",  playerB: "ARTUR",    winner: "IGOR SH." },
-      { matchNo: 3,  playerA: "DOLIK",    score: "23 – 16",  playerB: "PETER",    winner: "DOLIK"    },
-      { matchNo: 4,  playerA: "RAIMIS",   score: "14 – 20",  playerB: "ANDREJ",   winner: "ANDREJ"   },
-      { matchNo: 5,  playerA: "ANDRIUS",  score: "12 – 20",  playerB: "DOLIK",    winner: "DOLIK"    },
-      { matchNo: 6,  playerA: "ANDRIUS",  score: "17 – 24",  playerB: "IGOR SH.", winner: "IGOR SH." },
-      { matchNo: 7,  playerA: "RAIMIS",   score: "13 – 18",  playerB: "PETER",    winner: "PETER"    },
-      { matchNo: 8,  playerA: "DOLIK",    score: "13 – 18",  playerB: "RADEK",    winner: "RADEK"    },
-      { matchNo: 9,  playerA: "IGOR SH.", score: "15 – 25",  playerB: "RADEK",    winner: "RADEK"    },
-      { matchNo: 10, playerA: "RADEK",    score: "22 – 25",  playerB: "ARTUR",    winner: "ARTUR"    },
-      { matchNo: 11, playerA: "ARTUR",    score: "24 – 10",  playerB: "ANDREJ",   winner: "ARTUR"    },
-      { matchNo: 12, playerA: "PETER",    score: "18 – 23",  playerB: "DOLIK",    winner: "DOLIK"    },
-      { matchNo: 13, playerA: "ARTUR",    score: "17 – 11",  playerB: "RADEK",    winner: "ARTUR"    },
-    ];
-
-    // Get references to table bodies:
-    const playersTableBody = document.querySelector("#playersTable tbody");
-    const matchesTableBody = document.querySelector("#matchesTable tbody");
-
-    // Populate the players table:
-    players.forEach(player => {
-      const row = document.createElement("tr");
-      row.classList.add("player-row"); // helps us with the hover and click
-      row.setAttribute("data-player-name", player.name); // for lookup on click
-
-      row.innerHTML = `
-        <td>${player.number}</td>
-        <td>${player.name}</td>
-        <td>${player.globalPoints}</td>
-        <td>${player.localRating}</td>
+      document.getElementById("preview").innerHTML = `
+        <h3>Generation Request Submitted</h3>
+        <p><strong>Mode:</strong> ${summary.mode}</p>
+        <p><strong>Prompt:</strong> ${summary.prompt}</p>
+        <p><strong>Settings:</strong> ${summary.width} x ${summary.height}, ${summary.ratio}, Style: ${summary.style}</p>
+        <p><strong>Flags:</strong> Turbo ${summary.turbo}, Tiling ${summary.tiling}</p>
+        <p><strong>Controls:</strong> Canny ${summary.canny}, Scribble ${summary.scribble}, Depth ${summary.depth}, Pose ${summary.pose}, Lineart ${summary.lineart}</p>
+        <p>This is a text-only preview for a graphics-free workflow.</p>
       `;
-      playersTableBody.appendChild(row);
-
-      // Attach click event to highlight:
-      row.addEventListener("click", () => {
-        highlightPlayer(player.name);
-      });
     });
-
-    // Populate the matches table:
-    matches.forEach(m => {
-      const row = document.createElement("tr");
-      row.classList.add("match-row");
-      row.setAttribute("data-player-a", m.playerA);
-      row.setAttribute("data-player-b", m.playerB);
-
-      row.innerHTML = `
-        <td>${m.matchNo}</td>
-        <td>${m.playerA}</td>
-        <td>${m.score}</td>
-        <td>${m.playerB}</td>
-        <td>${m.winner}</td>
-      `;
-      matchesTableBody.appendChild(row);
-    });
-
-    function highlightPlayer(playerName) {
-      // 1) Clear existing highlights on the players table:
-      document.querySelectorAll("#playersTable tr").forEach(tr => {
-        tr.classList.remove("highlight");
-      });
-
-      // 2) Clear existing highlights on the matches table:
-      document.querySelectorAll("#matchesTable tr").forEach(tr => {
-        tr.classList.remove("highlight");
-      });
-
-      // 3) Highlight the selected player's row in playersTable:
-      //    (look for the <tr> whose "data-player-name" matches 'playerName')
-      const selectedPlayerRow = document.querySelector(
-        `#playersTable tr[data-player-name="${playerName}"]`
-      );
-      if (selectedPlayerRow) {
-        selectedPlayerRow.classList.add("highlight");
-      }
-
-      // 4) Highlight any matches in matchesTable that involve the selected player:
-      const matchRows = document.querySelectorAll("#matchesTable tr.match-row");
-      matchRows.forEach(row => {
-        const pA = row.getAttribute("data-player-a");
-        const pB = row.getAttribute("data-player-b");
-        if (pA === playerName || pB === playerName) {
-          row.classList.add("highlight");
-        }
-      });
-    }
   </script>
 </body>
 </html>
